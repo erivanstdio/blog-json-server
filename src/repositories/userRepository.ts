@@ -4,7 +4,7 @@ import path from "path"
 const DB_PATH = path.join(__dirname, "../database/db.json");
 
 interface User {
-  id: string | null,
+  id: string,
   name: string,
   email: string
 }
