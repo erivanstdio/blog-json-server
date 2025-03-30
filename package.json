@@ -1,4 +1,11 @@
 {
+  "name": "blog-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -6,13 +13,13 @@
     "fs-extra": "^11.3.0",
     "pg": "^8.14.1",
     "pg-promise": "^11.13.0",
-    "sequelize": "^6.37.7",
-    "typescript": "^5.8.2"
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.14",
     "@types/pg": "^8.11.11",
-    "@types/pg-promise": "^5.4.3"
+    "@types/pg-promise": "^5.4.3",
+    "typescript": "^5.8.2"
   }
 }
