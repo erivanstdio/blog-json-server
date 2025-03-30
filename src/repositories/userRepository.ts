@@ -1,5 +1,5 @@
-const fs = require("fs-extra")
-const path = require("path")
+import fs from "fs-extra";
+import path from "path"
 
 const DB_PATH = path.join(__dirname, "../database/db.json");
 
@@ -15,14 +15,14 @@ class UserRepository {
     return data.users;
   }
 
-  async getById(id) {
+  async getById(id: string) {
     const data = await fs.readJson(DB_PATH);
-    return data.users.find(user => user.id === id);
+    return data.users.find((user: User) => user.id === id);
   }
 
-  async deleteUser(id) {
+  async deleteUser(id: string) {
     const data = await fs.readJson(DB_PATH);
-    const updatedUsers = data.users.filter(user => user.id !== id);
+    const updatedUsers = data.users.filter((user: User) => user.id !== id);
 
     if (updatedUsers.length === data.users.length) {
       return false;
