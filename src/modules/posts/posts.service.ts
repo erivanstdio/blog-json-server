@@ -1,11 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Post } from './entities/post.entity';
+import { Tag } from '../tags/entities/tag.entity';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(
+    @InjectRepository(Post)
+    private postRepo: Repository<Post>,
+
+    @InjectRepository(Tag)
+    private tagRepo: Repository<Tag>,
+  ) {}
+
+  async create(createPostDto: CreatePostDto): Promise<Post> {
+    const { title, content, tags } = createPostDto;
+
+    const tagEntities = tags?.length
+      ? await Promise.all(
+          tags.map(async (name) => {
+            const existing = await this.tagRepo.findOne({ where: { name } });
+            return existing || this.tagRepo.create({ name });
+          }),
+        )
+      : [];
+
+    const post = this.postRepo.create({ title, content, tags: tagEntities });
+
+    return this.postRepo.save(post);
   }
 
   findAll() {
