@@ -3,14 +3,14 @@ import { Tag } from 'src/modules/tags/entities/tag.entity';
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
-export class Post extends BaseEntity {
+export class BlogPost extends BaseEntity {
   @Column()
   title: string;
 
   @Column('text')
   content: string;
 
-  @ManyToMany(() => Tag, (tag) => tag.posts, { cascade: true })
-  @JoinTable() // Cria a tabela de junção post_tags
+  @ManyToMany(() => Tag, (tag) => tag.blogPosts, { cascade: true })
+  @JoinTable() // join post_tags
   tags: Tag[];
 }

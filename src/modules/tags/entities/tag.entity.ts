@@ -1,4 +1,4 @@
-import { Post } from 'src/modules/posts/entities/post.entity';
+import { BlogPost } from 'src/modules/blog-posts/entities/blog-post.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 
@@ -10,6 +10,6 @@ export class Tag  {
   @Column({ unique: true })
   name: string;
 
-  @ManyToMany(() => Post, (post) => post.tags)
-  posts: Post[];
+  @ManyToMany(() => BlogPost, (post) => post.tags)
+  blogPosts: BlogPost[];
 }

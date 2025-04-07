@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostsModule } from './modules/posts/posts.module';
+import { BlogPostsModule } from './modules/blog-posts/blog-posts.module';
 import { UsersModule } from './modules/users/users.module';
 import { TagsModule } from './modules/tags/tags.module';
 
@@ -20,7 +20,7 @@ import { TagsModule } from './modules/tags/tags.module';
       ],
       synchronize: true,
     }),
-    PostsModule,
+    BlogPostsModule,
     UsersModule,
     TagsModule
   ],
