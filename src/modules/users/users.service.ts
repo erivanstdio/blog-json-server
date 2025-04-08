@@ -63,6 +63,7 @@ export class UsersService {
   async findPostsByUser(userId: UUID): Promise<BlogPost[]> {
     return this.blogPostRepo.find({
       where: { authorId: userId },
+      relations: ['authorId'],
     });
   }
 }
