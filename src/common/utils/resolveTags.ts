@@ -2,20 +2,8 @@ import { Repository } from 'typeorm';
 import { Tag } from 'src/modules/tags/entities/tag.entity';
 
 /**
- * Transforma a primeira letra de cada palavra em maiúscula.
- * Exemplo: "react native" → "React Native"
- */
-function capitalizeWords(str: string): string {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
-
-/**
  * Retorna uma lista de entidades `Tag` persistidas (existentes ou recém criadas),
- * normalizando os nomes com a primeira letra maiúscula.
+ * normalizando os nomes para lowercase e impedindo duplicatas.
  */
 export async function resolveTags(
   tagRepo: Repository<Tag>,
@@ -23,22 +11,21 @@ export async function resolveTags(
 ): Promise<Tag[]> {
   if (!tagNames?.length) return [];
 
-  // Capitalize the first letter
-  const normalizedNames = tagNames.map(capitalizeWords);
+  // Normalize tags para lowercase
+  const normalizedNames = tagNames.map((name) => name.toLowerCase());
 
-  // Filter existing Tags
+  // Busca tags já existentes
   const existingTags = await tagRepo.find({
     where: normalizedNames.map((name) => ({ name })),
   });
 
   const existingNames = existingTags.map((tag) => tag.name);
 
-  // Filter tags not existing in DB
+  // Cria apenas as que ainda não existem
   const newTagNames = normalizedNames.filter(
     (name) => !existingNames.includes(name),
   );
 
-  // Create and save new tags
   const newTags = newTagNames.map((name) => tagRepo.create({ name }));
   const savedNewTags = await tagRepo.save(newTags);
 
