@@ -1,4 +1,5 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { UUID } from 'crypto';
 
 export class CreateBlogPostDto {
   @IsString()
@@ -17,5 +18,5 @@ export class CreateBlogPostDto {
 
   @IsString({ each: true })
   @IsNotEmpty({ message: 'O autor precisa ser especificado!' })
-  authorId: string;
+  authorId: UUID;
 }

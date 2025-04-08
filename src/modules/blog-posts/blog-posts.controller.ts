@@ -14,6 +14,7 @@ import { BlogPostsService } from './blog-posts.service';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
 import { BlogPost } from './entities/blog-post.entity';
+import { UUID } from 'crypto';
 
 @Controller('posts')
 export class BlogPostsController {
@@ -31,13 +32,13 @@ export class BlogPostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: string): Promise<BlogPost> {
+  findOne(@Param('id', ParseIntPipe) id: UUID): Promise<BlogPost> {
     return this.blogPostsService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id', ParseIntPipe) id: UUID,
     @Body() updatePostDto: UpdateBlogPostDto,
   ): Promise<BlogPost> {
     return this.blogPostsService.update(id, updatePostDto);
@@ -45,7 +46,7 @@ export class BlogPostsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: string): Promise<void> {
+  remove(@Param('id', ParseIntPipe) id: UUID): Promise<void> {
     return this.blogPostsService.remove(id);
   }
 }

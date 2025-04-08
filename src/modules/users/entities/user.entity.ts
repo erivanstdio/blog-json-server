@@ -4,7 +4,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity('users') // (opcional) define o nome da tabela como 'users'
 export class User extends BaseEntity {
-  @Column()
+  @Column({ length: 100 })
   name: string;
 
   @Column({ unique: true })

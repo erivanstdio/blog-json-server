@@ -6,6 +6,7 @@ import { Tag } from '../tags/entities/tag.entity';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
 import { User } from '../users/entities/user.entity';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class BlogPostsService {
@@ -54,7 +55,7 @@ export class BlogPostsService {
     return this.blogPostRepo.find({ relations: ['tags'] });
   }
 
-  async findOne(id: string): Promise<BlogPost> {
+  async findOne(id: UUID): Promise<BlogPost> {
     const post = await this.blogPostRepo.findOne({
       where: { id },
       relations: ['tags'],
@@ -67,7 +68,7 @@ export class BlogPostsService {
     return post;
   }
 
-  async update(id: string, updatePostDto: UpdateBlogPostDto): Promise<BlogPost> {
+  async update(id: UUID, updatePostDto: UpdateBlogPostDto): Promise<BlogPost> {
     const post = await this.findOne(id); // Garante que o post existe
 
     if (updatePostDto.tags) {
@@ -84,7 +85,7 @@ export class BlogPostsService {
     return this.blogPostRepo.save(post);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: UUID): Promise<void> {
     const post = await this.findOne(id); // Verifica se existe
     await this.blogPostRepo.remove(post);
   }

@@ -1,3 +1,4 @@
+import { UUID } from 'crypto';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Tag } from 'src/modules/tags/entities/tag.entity';
 import { User } from 'src/modules/users/entities/user.entity';
@@ -16,5 +17,5 @@ export class BlogPost extends BaseEntity {
   tags: Tag[];
 
   @ManyToOne(() => User, (user) => user.blogPosts, { eager: true })
-  authorId: string;
+  authorId: UUID;
 }
