@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { BlogPostsService } from './blog-posts.service';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
@@ -9,27 +20,32 @@ export class BlogPostsController {
   constructor(private readonly blogPostsService: BlogPostsService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createPostDto: CreateBlogPostDto): Promise<BlogPost> {
     return this.blogPostsService.create(createPostDto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<BlogPost[]> {
     return this.blogPostsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.blogPostsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: string): Promise<BlogPost> {
+    return this.blogPostsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdateBlogPostDto) {
-    return this.blogPostsService.update(+id, updatePostDto);
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updatePostDto: UpdateBlogPostDto,
+  ): Promise<BlogPost> {
+    return this.blogPostsService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.blogPostsService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: string): Promise<void> {
+    return this.blogPostsService.remove(id);
   }
 }

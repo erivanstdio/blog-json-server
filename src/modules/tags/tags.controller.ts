@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
@@ -8,6 +19,7 @@ export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED) // 201
   create(@Body() createTagDto: CreateTagDto) {
     return this.tagsService.create(createTagDto);
   }
@@ -18,17 +30,21 @@ export class TagsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tagsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.tagsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagsService.update(+id, updateTagDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTagDto: UpdateTagDto,
+  ) {
+    return this.tagsService.update(id, updateTagDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagsService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT) // 204
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.tagsService.remove(id);
   }
 }

@@ -14,4 +14,8 @@ export class CreateBlogPostDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
+
+  @IsString({ each: true })
+  @IsNotEmpty({ message: 'O autor precisa ser especificado!' })
+  authorId: string;
 }

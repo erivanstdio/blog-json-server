@@ -1,8 +1,18 @@
+import { Entity, Column, OneToMany } from 'typeorm';
+import { BlogPost } from 'src/modules/blog-posts/entities/blog-post.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Entity, Column } from 'typeorm';
 
-@Entity()
+@Entity('users') // (opcional) define o nome da tabela como 'users'
 export class User extends BaseEntity {
   @Column()
   name: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @OneToMany(() => BlogPost, (post) => post.authorId)
+  blogPosts: BlogPost[];
 }
