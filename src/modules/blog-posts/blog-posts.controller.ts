@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  ParseIntPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -32,13 +31,13 @@ export class BlogPostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: UUID): Promise<BlogPost> {
+  findOne(@Param('id') id: UUID): Promise<BlogPost> {
     return this.blogPostsService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: UUID,
+    @Param('id') id: UUID,
     @Body() updatePostDto: UpdateBlogPostDto,
   ): Promise<BlogPost> {
     return this.blogPostsService.update(id, updatePostDto);
@@ -46,7 +45,7 @@ export class BlogPostsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: UUID): Promise<void> {
+  remove(@Param('id') id: UUID): Promise<void> {
     return this.blogPostsService.remove(id);
   }
 }

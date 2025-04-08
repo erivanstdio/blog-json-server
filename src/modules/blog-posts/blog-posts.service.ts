@@ -7,6 +7,7 @@ import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
 import { User } from '../users/entities/user.entity';
 import { UUID } from 'crypto';
+import { resolveTags } from 'src/common/utils/resolveTags';
 
 @Injectable()
 export class BlogPostsService {
@@ -30,35 +31,27 @@ export class BlogPostsService {
       throw new NotFoundException(`Usuário com ID ${authorId} não encontrado`);
     }
 
-    // handle tags
-    const tagEntities = tags?.length
-      ? await Promise.all(
-        tags.map(async (name) => {
-          const existing = await this.tagRepo.findOne({ where: { name } });
-          return existing ?? this.tagRepo.create({ name });
-        }),
-      )
-      : [];
+    const tagEntities = await resolveTags(this.tagRepo, tags);
 
     // Create blogPost
     const post = this.blogPostRepo.create({
       title,
       content,
       tags: tagEntities,
-      authorId: author.id
+      author: author
     });
 
     return this.blogPostRepo.save(post);
   }
 
   async findAll(): Promise<BlogPost[]> {
-    return this.blogPostRepo.find({ relations: ['tags'] });
+    return this.blogPostRepo.find({ relations: ['tags, author'] });
   }
 
   async findOne(id: UUID): Promise<BlogPost> {
     const post = await this.blogPostRepo.findOne({
       where: { id },
-      relations: ['tags'],
+      relations: ['tags, author'],
     });
 
     if (!post) {

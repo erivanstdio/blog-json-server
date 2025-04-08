@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlogPost } from '../blog-posts/entities/blog-post.entity';
 import { Repository } from 'typeorm';
@@ -18,6 +18,14 @@ export class UsersService {
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userRepo.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('Este e-mail já está em uso.');
+    }
+
     const user = this.userRepo.create(createUserDto);
     return this.userRepo.save(user);
   }
@@ -62,8 +70,8 @@ export class UsersService {
   // Extra: buscar posts de um usuário
   async findPostsByUser(userId: UUID): Promise<BlogPost[]> {
     return this.blogPostRepo.find({
-      where: { authorId: userId },
-      relations: ['authorId'],
+      where: { author: { id: userId } },
+      relations: ['author'],
     });
   }
 }
