@@ -45,13 +45,13 @@ export class BlogPostsService {
   }
 
   async findAll(): Promise<BlogPost[]> {
-    return this.blogPostRepo.find({ relations: ['tags, author'] });
+    return this.blogPostRepo.find({ relations: ['tags', 'author'] });
   }
 
   async findOne(id: UUID): Promise<BlogPost> {
     const post = await this.blogPostRepo.findOne({
       where: { id },
-      relations: ['tags, author'],
+      relations: ['tags', 'author'],
     });
 
     if (!post) {
