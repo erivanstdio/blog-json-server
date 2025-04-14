@@ -41,8 +41,8 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Get(':id/posts')
-  getUserPosts(@Param('id') id: UUID) {
-    return this.usersService.findPostsByUser(id);
+  @Get(':id/publications')
+  getUserPublications(@Param('id') id: UUID) {
+    return this.usersService.findPublicationsByUser(id);
   }
 }

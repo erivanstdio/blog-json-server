@@ -1,7 +1,7 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { UUID } from 'crypto';
 
-export class CreateBlogPostDto {
+export class CreatePublicationDto {
   @IsString()
   @IsNotEmpty({ message: 'O título não pode estar vazio' })
   @MaxLength(100, { message: 'O título deve ter no máximo 100 caracteres' })

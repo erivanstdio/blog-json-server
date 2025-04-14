@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BlogPost } from './entities/blog-post.entity';
+import { Publication } from './entities/publication.entity';
 import { Tag } from '../tags/entities/tag.entity';
-import { CreateBlogPostDto } from './dto/create-blog-post.dto';
-import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
+import { CreatePublicationDto } from './dto/create-publication.dto';
+import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { User } from '../users/entities/user.entity';
 import { UUID } from 'crypto';
 import { resolveTags } from 'src/common/utils/resolveTags';
 
 @Injectable()
-export class BlogPostsService {
+export class PublicationsService {
   constructor(
-    @InjectRepository(BlogPost)
-    private blogPostRepo: Repository<BlogPost>,
+    @InjectRepository(Publication)
+    private publicationRepo: Repository<Publication>,
 
     @InjectRepository(Tag)
     private tagRepo: Repository<Tag>,
@@ -22,7 +22,7 @@ export class BlogPostsService {
     private userRepo: Repository<User>,
   ) { }
 
-  async create(createPostDto: CreateBlogPostDto): Promise<BlogPost> {
+  async create(createPostDto: CreatePublicationDto): Promise<Publication> {
     const { title, content, tags = [], authorId } = createPostDto;
 
     // Search for author
@@ -33,23 +33,23 @@ export class BlogPostsService {
 
     const tagEntities = await resolveTags(this.tagRepo, tags);
 
-    // Create blogPost
-    const post = this.blogPostRepo.create({
+    // Create publication
+    const post = this.publicationRepo.create({
       title,
       content,
       tags: tagEntities,
       author: author
     });
 
-    return this.blogPostRepo.save(post);
+    return this.publicationRepo.save(post);
   }
 
-  async findAll(): Promise<BlogPost[]> {
-    return this.blogPostRepo.find({ relations: ['tags', 'author'] });
+  async findAll(): Promise<Publication[]> {
+    return this.publicationRepo.find({ relations: ['tags', 'author'] });
   }
 
-  async findOne(id: UUID): Promise<BlogPost> {
-    const post = await this.blogPostRepo.findOne({
+  async findOne(id: UUID): Promise<Publication> {
+    const post = await this.publicationRepo.findOne({
       where: { id },
       relations: ['tags', 'author'],
     });
@@ -61,7 +61,7 @@ export class BlogPostsService {
     return post;
   }
 
-  async update(id: UUID, updatePostDto: UpdateBlogPostDto): Promise<BlogPost> {
+  async update(id: UUID, updatePostDto: UpdatePublicationDto): Promise<Publication> {
     const post = await this.findOne(id); // Garante que o post existe
 
     if (updatePostDto.tags) {
@@ -75,11 +75,11 @@ export class BlogPostsService {
     }
 
     Object.assign(post, updatePostDto);
-    return this.blogPostRepo.save(post);
+    return this.publicationRepo.save(post);
   }
 
   async remove(id: UUID): Promise<void> {
-    const post = await this.findOne(id); // Verifica se existe
-    await this.blogPostRepo.remove(post);
+    const post = await this.findOne(id); // Verify if this publication exists
+    await this.publicationRepo.remove(post);
   }
 }

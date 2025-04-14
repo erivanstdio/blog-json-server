@@ -12,18 +12,18 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class BlogPost extends BaseEntity {
+export class Publication extends BaseEntity {
   @Column()
   title: string;
 
   @Column('text')
   content: string;
 
-  @ManyToMany(() => Tag, (tag) => tag.blogPosts, { cascade: true })
+  @ManyToMany(() => Tag, (tag) => tag.publications, { cascade: true })
   @JoinTable()
   tags: Tag[];
 
-  @ManyToOne(() => User, (user) => user.blogPosts, { eager: true })
+  @ManyToOne(() => User, (user) => user.publications, { eager: true })
   @JoinColumn({ name: 'authorId' }) // conecta o campo acima como FK
   author: User;
 }

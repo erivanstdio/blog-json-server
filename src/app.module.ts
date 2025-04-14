@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BlogPostsModule } from './modules/blog-posts/blog-posts.module';
 import { UsersModule } from './modules/users/users.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { PublicationsModule } from './modules/publications/publication.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { TagsModule } from './modules/tags/tags.module';
       ],
       synchronize: true,
     }),
-    BlogPostsModule,
+    PublicationsModule,
     UsersModule,
     TagsModule
   ],

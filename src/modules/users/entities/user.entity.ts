@@ -1,5 +1,5 @@
 import { Entity, Column, OneToMany } from 'typeorm';
-import { BlogPost } from 'src/modules/blog-posts/entities/blog-post.entity';
+import { Publication } from 'src/modules/publications/entities/publication.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity('users') // (opcional) define o nome da tabela como 'users'
@@ -13,6 +13,6 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => BlogPost, (post) => post.author.id)
-  blogPosts?: BlogPost[];
+  @OneToMany(() => Publication, (post) => post.author.id)
+  publications?: Publication[];
 }

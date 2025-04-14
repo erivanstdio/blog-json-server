@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlogPost } from '../blog-posts/entities/blog-post.entity';
+import { Publication } from '../publications/entities/publication.entity';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,8 +13,8 @@ export class UsersService {
     @InjectRepository(User)
     private userRepo: Repository<User>,
 
-    @InjectRepository(BlogPost)
-    private blogPostRepo: Repository<BlogPost>
+    @InjectRepository(Publication)
+    private publicationRepo: Repository<Publication>
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -34,9 +34,9 @@ export class UsersService {
     return this.userRepo.find();
   }
 
-  async findAllUsersWithBlogPosts(): Promise<User[]> {
+  async findAllUsersWithPublications(): Promise<User[]> {
     return this.userRepo.find({
-      relations: ['blogPosts'],
+      relations: ['publications'],
     })
   }
 
@@ -48,8 +48,8 @@ export class UsersService {
     return user;
   }
 
-  async findOneUserWithBlogPosts(id: UUID): Promise<User> {
-    const user = await this.userRepo.findOne({ where: { id }, relations: ['blogPosts'] });
+  async findOneUserWithPublications(id: UUID): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id }, relations: ['publications'] });
 
     if (!user) throw new NotFoundException(`User #${id} not found`);
 
@@ -67,9 +67,9 @@ export class UsersService {
     await this.userRepo.remove(user);
   }
 
-  // Extra: buscar posts de um usuário
-  async findPostsByUser(userId: UUID): Promise<BlogPost[]> {
-    return this.blogPostRepo.find({
+  // Extra: search user publications
+  async findPublicationsByUser(userId: UUID): Promise<Publication[]> {
+    return this.publicationRepo.find({
       where: { author: { id: userId } },
       relations: ['author'],
     });
